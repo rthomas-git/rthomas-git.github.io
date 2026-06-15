@@ -112,6 +112,7 @@
    }
    
    .nav-social {
+	list-style: none;
 	 display: flex;
 	 gap: 0.4rem;
 	 align-items: center;
@@ -163,7 +164,6 @@
 	 margin-bottom: 2.5rem;
 	 padding: 0.45rem 1rem;
 	 border: 2px solid var(--green);
-	 animation: blink-slow 2s step-end infinite;
    }
    
    @keyframes blink-slow {
@@ -205,12 +205,15 @@
    }
    
    .hero-hint {
-	 font-family: var(--pixel);
-	 font-size: 0.45rem;
-	 color: var(--dim);
-	 letter-spacing: 0.18em;
-	 animation: blink-slow 1.4s step-end infinite;
-   }
+	font-family: var(--pixel);
+	font-size: 0.62rem;
+	color: var(--yellow);
+	letter-spacing: 0.18em;
+	text-decoration: none;
+	display: inline-block;
+	transition: color var(--snap);
+  }
+  .hero-hint:hover { color: var(--text); }
    
    /* ── SECTION DIVIDER ── */
    .section-header {
