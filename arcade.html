@@ -1,0 +1,475 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+  <title>ARCADE — Rikoe Thomas</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <link rel="stylesheet" href="assets/css/portfolio.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    /* ─── ARCADE PAGE EXTRAS ─── */
+
+    .arcade-wrap {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    /* ── Insert Coin header ── */
+    .arcade-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .arcade-header .section-tag {
+      margin-bottom: 1rem;
+    }
+    .arcade-header h1 {
+      font-family: var(--pixel);
+      font-size: clamp(1rem, 3vw, 1.6rem);
+      color: var(--yellow);
+      margin: 0 0 0.75rem;
+      line-height: 1.5;
+    }
+    .arcade-header p {
+      font-family: var(--mono);
+      color: var(--dim);
+      font-size: 0.8rem;
+      margin: 0;
+    }
+
+    /* ── Game selector row ── */
+    .game-select-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .game-chip {
+      font-family: var(--pixel);
+      font-size: 0.5rem;
+      padding: 0.55rem 1rem;
+      border: 2px solid var(--border);
+      background: var(--card);
+      color: var(--dim);
+      cursor: pointer;
+      transition: all var(--snap);
+      letter-spacing: 0.05em;
+      line-height: 1.6;
+    }
+    .game-chip:hover,
+    .game-chip.active {
+      border-color: var(--yellow);
+      color: var(--yellow);
+      box-shadow: 3px 3px 0 var(--yellow);
+    }
+    .game-chip.wip {
+      border-color: var(--border);
+      color: var(--border);
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+    .game-chip.wip:hover {
+      border-color: var(--border);
+      color: var(--border);
+      box-shadow: none;
+    }
+
+    /* ── Random button ── */
+    .random-btn {
+      display: block;
+      margin: 0 auto 2.5rem;
+      font-family: var(--pixel);
+      font-size: 0.65rem;
+      padding: 0.9rem 2rem;
+      background: var(--yellow);
+      color: #000;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      line-height: 1.6;
+      transition: all var(--snap);
+    }
+    .random-btn:hover {
+      background: #fff;
+      box-shadow: 4px 4px 0 var(--yellow);
+      transform: translate(-2px, -2px);
+    }
+    .random-btn:active {
+      transform: translate(0, 0);
+      box-shadow: none;
+    }
+
+    /* ── Arcade cabinet ── */
+    .cabinet {
+      border: 2px solid var(--border);
+      background: var(--surface);
+      box-shadow: 6px 6px 0 var(--border);
+      overflow: hidden;
+    }
+
+    /* top bezel */
+    .cabinet-top {
+      background: var(--card);
+      border-bottom: 2px solid var(--border);
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .cabinet-dot {
+      width: 10px;
+      height: 10px;
+      border: 2px solid var(--border);
+    }
+    .cabinet-dot.on  { background: var(--green); border-color: var(--green); }
+    .cabinet-dot.dim { background: var(--yellow); border-color: var(--yellow); opacity: 0.5; }
+    .cabinet-dot.off { background: var(--border); }
+    .cabinet-title {
+      font-family: var(--pixel);
+      font-size: 0.45rem;
+      color: var(--dim);
+      letter-spacing: 0.1em;
+      margin-left: 0.4rem;
+    }
+    .cabinet-title span {
+      color: var(--yellow);
+    }
+
+    /* screen area */
+    .cabinet-screen {
+      position: relative;
+      width: 100%;
+      /* 16:9 responsive */
+      padding-top: 56.25%;
+      background: #000;
+    }
+    .cabinet-screen iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* idle / loading overlays */
+    .screen-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      z-index: 10;
+    }
+    .screen-overlay .overlay-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--yellow);
+    }
+    .screen-overlay .overlay-text {
+      font-family: var(--pixel);
+      font-size: 0.6rem;
+      color: var(--yellow);
+      text-align: center;
+      line-height: 2;
+      animation: blink-slow 1.4s step-end infinite;
+    }
+    .screen-overlay .overlay-sub {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--dim);
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    /* bottom bezel */
+    .cabinet-bottom {
+      background: var(--card);
+      border-top: 2px solid var(--border);
+      padding: 0.55rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .cabinet-game-name {
+      font-family: var(--pixel);
+      font-size: 0.45rem;
+      color: var(--yellow);
+      letter-spacing: 0.1em;
+    }
+    .cabinet-controls {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--dim);
+    }
+    .cabinet-controls span {
+      color: var(--text);
+    }
+
+    /* ── Fullscreen button ── */
+    .fullscreen-row {
+      text-align: right;
+      margin-top: 1rem;
+    }
+    .fullscreen-btn {
+      font-family: var(--pixel);
+      font-size: 0.45rem;
+      padding: 0.5rem 0.9rem;
+      border: 2px solid var(--border);
+      background: transparent;
+      color: var(--dim);
+      cursor: pointer;
+      transition: all var(--snap);
+      letter-spacing: 0.05em;
+    }
+    .fullscreen-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      box-shadow: 3px 3px 0 var(--blue);
+    }
+
+    /* ── Game info strip ── */
+    .game-info {
+      margin-top: 2rem;
+      border: 2px solid var(--border);
+      background: var(--card);
+      padding: 1.25rem 1.5rem;
+      display: none;
+    }
+    .game-info.visible { display: block; }
+    .game-info h3 {
+      font-family: var(--pixel);
+      font-size: 0.7rem;
+      color: var(--yellow);
+      margin: 0 0 0.5rem;
+    }
+    .game-info p {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--dim);
+      margin: 0;
+      line-height: 1.7;
+    }
+    .game-info .info-tags {
+      margin-top: 0.75rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    @media (max-width: 600px) {
+      .cabinet-bottom { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+      .fullscreen-row { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+    <!-- ─── NAV ─── -->
+    <nav id="site-nav">
+      <a href="index.html" class="nav-logo">RIKOE.THOMAS</a>
+      <ul class="nav-links">
+        <li><a href="index.html">PROJECT EXP</a></li>
+        <li><a href="funprojects.html">SIDE QUESTS</a></li>
+        <li><a href="about.html">PLAYER INFO</a></li>
+        <li><a href="arcade.html" class="active">ARCADE</a></li>
+      </ul>
+      <ul class="nav-social">
+        <li>
+          <a href="https://www.linkedin.com/in/rikoe-thomas/" aria-label="LinkedIn">
+            <i class="fab fa-linkedin"></i>
+          </a>
+        </li>
+      </ul>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">&#9776;</button>
+    </nav>
+
+  <!-- ─── MAIN ─── -->
+  <main class="arcade-wrap">
+
+    <!-- Header -->
+    <div class="arcade-header">
+      <div class="section-tag">BONUS STAGE</div>
+      <h1>ARCADE</h1>
+      <p>Pick a game or let the machine choose — play right here, no download needed.</p>
+    </div>
+
+    <!-- Game chips -->
+    <div class="game-select-row" id="game-chips">
+      <button class="game-chip" data-game="cactusjim">CACTUS JIM</button>
+      <button class="game-chip wip" data-game="treasureisland" title="Coming soon">TREASURE ISLAND &nbsp;[LOADING...]</button>
+      <!-- ADD THIRD GAME: replace "GAME THREE" and data-game="gamethree" with actual name/folder -->
+      <button class="game-chip" data-game="crackthesafe">CRACK THE SAFE</button>
+    </div>
+
+    <!-- Random button -->
+    <button class="random-btn" id="random-btn">▶ &nbsp;INSERT COIN — RANDOM GAME</button>
+
+    <!-- Arcade cabinet -->
+    <div class="cabinet" id="cabinet">
+
+      <!-- Top bezel -->
+      <div class="cabinet-top">
+        <div class="cabinet-dot on"></div>
+        <div class="cabinet-dot dim"></div>
+        <div class="cabinet-dot off"></div>
+        <span class="cabinet-title">RT ARCADE &nbsp;// &nbsp;<span id="cabinet-label">NO GAME LOADED</span></span>
+      </div>
+
+      <!-- Screen -->
+      <div class="cabinet-screen" id="cabinet-screen">
+
+        <!-- Idle overlay (shown before a game is picked) -->
+        <div class="screen-overlay" id="screen-overlay">
+          <div class="overlay-icon">🕹</div>
+          <div class="overlay-text">INSERT COIN TO PLAY</div>
+          <div class="overlay-sub">Press the button above or pick a game</div>
+        </div>
+
+        <!-- The game iframe (hidden until a game loads) -->
+        <iframe
+          id="game-frame"
+          title="Game"
+          allowfullscreen
+          allow="autoplay; fullscreen"
+          style="display:none;"
+        ></iframe>
+
+      </div>
+
+      <!-- Bottom bezel -->
+      <div class="cabinet-bottom">
+        <div class="cabinet-game-name" id="cabinet-game-name">&nbsp;</div>
+        <div class="cabinet-controls">
+          WASD / ARROW KEYS &nbsp;·&nbsp; <span>SPACE</span> to jump/shoot
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Fullscreen button -->
+    <div class="fullscreen-row">
+      <button class="fullscreen-btn" id="fullscreen-btn">⛶ &nbsp;FULLSCREEN</button>
+    </div>
+
+    <!-- Game info strip (shown after game loads) -->
+    <div class="game-info" id="game-info">
+      <h3 id="info-title"></h3>
+      <p id="info-desc"></p>
+      <div class="info-tags" id="info-tags"></div>
+    </div>
+
+  </main>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="site-footer">
+    <p>© 2026 RIKOE THOMAS &nbsp;·&nbsp; INSERT COIN TO CONTINUE</p>
+    <p><a href="https://html5up.net" target="_blank" rel="noopener">Design: HTML5 UP</a></p>
+  </footer>
+
+  <script>
+    // ── Game registry ──────────────────────────────────────────────────
+    // To add a game: add an entry here AND a chip in the HTML above.
+    // "src" is the path to the Unity WebGL index.html for that game.
+    // Set "available: false" to disable (shows WIP chip style).
+    const GAMES = {
+      cactusjim: {
+        title: 'CACTUS JIM',
+        desc: 'Dodge an endless wave of cacti in this platform minigame. The longer you survive, the higher your score climbs.',
+        tags: ['UNITY', 'C#', 'PLATFORM', 'ENDLESS RUNNER'],
+        tagColors: ['yellow', 'yellow', 'blue', 'blue'],
+        src: 'arcade/cactusjim/index.html',
+        controls: 'ARROW KEYS to move &nbsp;·&nbsp; SPACE to jump',
+        available: true,
+      },
+      treasureisland: {
+        title: 'TREASURE ISLAND',
+        desc: 'Slot machine minigame. Coming soon!',
+        tags: ['UNITY', 'C#', 'CASINO', 'IN PROGRESS'],
+        tagColors: ['yellow', 'yellow', 'red', 'red'],
+        src: '',        // fill in once exported
+        controls: 'MOUSE to spin',
+        available: false,
+      },
+      // ── THIRD GAME: fill in title, desc, src, controls ──
+      crackthesafe: {
+        title: 'CRACK THE SAFE',           // ← change me
+        desc: 'Description goes here.',// ← change me
+        tags: ['UNITY', 'C#'],
+        tagColors: ['yellow', 'yellow'],
+        src: 'arcade/crackthesafe/index.html', // ← change me
+        controls: 'WASD / ARROW KEYS',
+        available: true,
+      },
+    };
+
+    // Chips that are "available" (not wip class)
+    function availableKeys() {
+      return Object.keys(GAMES).filter(k => GAMES[k].available);
+    }
+
+    // ── Load a game into the cabinet ──────────────────────────────────
+    function loadGame(key) {
+      const game = GAMES[key];
+      if (!game || !game.available) return;
+
+      // activate chip
+      document.querySelectorAll('.game-chip').forEach(c => c.classList.remove('active'));
+      const chip = document.querySelector(`[data-game="${key}"]`);
+      if (chip) chip.classList.add('active');
+
+      // hide overlay, show iframe
+      document.getElementById('screen-overlay').style.display = 'none';
+      const frame = document.getElementById('game-frame');
+      frame.style.display = 'block';
+      frame.src = game.src;
+
+      // update bezel labels
+      document.getElementById('cabinet-label').textContent = game.title;
+      document.getElementById('cabinet-game-name').textContent = '▶ ' + game.title;
+      document.querySelector('.cabinet-controls').innerHTML =
+        game.controls + ' &nbsp;·&nbsp; <span>ESC</span> to pause';
+
+      // show info strip
+      document.getElementById('info-title').textContent = game.title;
+      document.getElementById('info-desc').textContent = game.desc;
+      const tagsEl = document.getElementById('info-tags');
+      tagsEl.innerHTML = game.tags
+        .map((t, i) => `<span class="tag tag-${game.tagColors[i] || 'blue'}">${t}</span>`)
+        .join('');
+      document.getElementById('game-info').classList.add('visible');
+    }
+
+    // ── Chip click ────────────────────────────────────────────────────
+    document.querySelectorAll('.game-chip:not(.wip)').forEach(chip => {
+      chip.addEventListener('click', () => loadGame(chip.dataset.game));
+    });
+
+    // ── Random button ─────────────────────────────────────────────────
+    document.getElementById('random-btn').addEventListener('click', () => {
+      const keys = availableKeys();
+      const pick = keys[Math.floor(Math.random() * keys.length)];
+      loadGame(pick);
+    });
+
+    // ── Fullscreen ────────────────────────────────────────────────────
+    document.getElementById('fullscreen-btn').addEventListener('click', () => {
+      const frame = document.getElementById('game-frame');
+      if (!frame.src) return;
+      if (frame.requestFullscreen)      frame.requestFullscreen();
+      else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
+    });
+
+    // ── Mobile nav toggle ─────────────────────────────────────────────
+    document.getElementById('nav-toggle').addEventListener('click', () => {
+      document.getElementById('nav-links').classList.toggle('open');
+    });
+  </script>
+
+</body>
+</html>

@@ -82,13 +82,14 @@
 	 flex-shrink: 0;
 	 letter-spacing: 0.05em;
 	 text-shadow: 2px 2px 0 rgba(255,230,0,0.25);
+	 white-space: nowrap;
+	 flex-shrink: 0;
    }
    
    .nav-links {
 	 list-style: none;
 	 display: flex;
 	 gap: 0;
-	 flex: 1;
    }
    .nav-links a {
 	 font-family: var(--pixel);
@@ -114,6 +115,7 @@
    .nav-social {
 	list-style: none;
 	 display: flex;
+	 margin-left: auto;
 	 gap: 0.4rem;
 	 align-items: center;
 	 flex-shrink: 0;
