@@ -301,10 +301,11 @@
 
     <!-- Game chips -->
     <div class="game-select-row" id="game-chips">
-      <button class="game-chip" data-game="cactusjim">CACTUS JIM</button>
-      <button class="game-chip wip" data-game="treasureisland" title="Coming soon">TREASURE ISLAND &nbsp;[LOADING...]</button>
       <!-- ADD THIRD GAME: replace "GAME THREE" and data-game="gamethree" with actual name/folder -->
       <button class="game-chip" data-game="crackthesafe">CRACK THE SAFE</button>
+      <button class="game-chip wip" data-game="cactusjim">CACTUS JIM</button>
+      <button class="game-chip wip" data-game="treasureisland" title="Coming soon">TREASURE ISLAND &nbsp;[LOADING...]</button>
+
     </div>
 
     <!-- Random button -->
@@ -352,10 +353,10 @@
 
     </div>
 
-    <!-- Fullscreen button -->
+    <!-- Fullscreen button
     <div class="fullscreen-row">
       <button class="fullscreen-btn" id="fullscreen-btn">⛶ &nbsp;FULLSCREEN</button>
-    </div>
+    </div> -->
 
     <!-- Game info strip (shown after game loads) -->
     <div class="game-info" id="game-info">
@@ -458,12 +459,12 @@
     });
 
     // ── Fullscreen ────────────────────────────────────────────────────
-    document.getElementById('fullscreen-btn').addEventListener('click', () => {
-      const frame = document.getElementById('game-frame');
-      if (!frame.src) return;
-      if (frame.requestFullscreen)      frame.requestFullscreen();
-      else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
-    });
+    //document.getElementById('fullscreen-btn').addEventListener('click', () => {
+    //  const frame = document.getElementById('game-frame');
+    //  if (!frame.src) return;
+    //  if (frame.requestFullscreen)      frame.requestFullscreen();
+    //  else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
+    //});
 
     // ── Mobile nav toggle ─────────────────────────────────────────────
     document.getElementById('nav-toggle').addEventListener('click', () => {
