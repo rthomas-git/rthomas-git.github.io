@@ -235,7 +235,7 @@
 
     /* ── Game info strip ── */
     .game-info {
-      margin-top: 2rem;
+      margin-bottom: 2rem;
       border: 2px solid var(--border);
       background: var(--card);
       padding: 1.25rem 1.5rem;
@@ -303,13 +303,20 @@
     <div class="game-select-row" id="game-chips">
       <!-- ADD THIRD GAME: replace "GAME THREE" and data-game="gamethree" with actual name/folder -->
       <button class="game-chip" data-game="crackthesafe">CRACK THE SAFE</button>
+      <button class="game-chip" data-game="treasureisland">TREASURE ISLAND</button>
       <button class="game-chip wip" data-game="cactusjim">CACTUS JIM</button>
-      <button class="game-chip wip" data-game="treasureisland" title="Coming soon">TREASURE ISLAND &nbsp;[LOADING...]</button>
 
     </div>
 
     <!-- Random button -->
     <button class="random-btn" id="random-btn">▶ &nbsp;INSERT COIN — RANDOM GAME</button>
+
+        <!-- Game info strip (shown after game loads) -->
+        <div class="game-info" id="game-info">
+          <h3 id="info-title"></h3>
+          <p id="info-desc"></p>
+          <div class="info-tags" id="info-tags"></div>
+        </div>
 
     <!-- Arcade cabinet -->
     <div class="cabinet" id="cabinet">
@@ -358,12 +365,7 @@
       <button class="fullscreen-btn" id="fullscreen-btn">⛶ &nbsp;FULLSCREEN</button>
     </div> -->
 
-    <!-- Game info strip (shown after game loads) -->
-    <div class="game-info" id="game-info">
-      <h3 id="info-title"></h3>
-      <p id="info-desc"></p>
-      <div class="info-tags" id="info-tags"></div>
-    </div>
+
 
   </main>
 
@@ -390,14 +392,13 @@
       },
       treasureisland: {
         title: 'TREASURE ISLAND',
-        desc: 'Slot machine minigame. Coming soon!',
-        tags: ['UNITY', 'C#', 'CASINO', 'IN PROGRESS'],
+        desc: 'Pick a chest, any chest. Each one hides a cash prize. Keep cracking them open to stack your winnings. But one chest is empty, and the second you find it, the bonus round is over. Push your luck or play it safe?',
+        tags: ['UNITY', 'C#', 'CASINO BONUS GAME'],
         tagColors: ['yellow', 'yellow', 'red', 'red'],
-        src: '',        // fill in once exported
-        controls: 'MOUSE to spin',
-        available: false,
+        src: 'arcade/treasureisland/index.html',
+        controls: 'MOUSE to pick chests',
+        available: true,
       },
-      // ── THIRD GAME ──
       crackthesafe: {
         title: 'CRACK THE SAFE',
         desc: 'Crack the safe by guessing the secret number before time runs out. Too high, too low, the safe drops hints, the clock drops mercilessly. Beat the timer or walk away empty-handed.',
